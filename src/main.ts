@@ -23,34 +23,45 @@ async function bootstrap() {
     console.log('✅ NestJS app created successfully');
 
     const prisma = app.get(PrismaService);
-    await prisma.$connect();
-    console.log('✅ Database connected successfully');
+    
+    // Database connection'ni sinab ko'ramiz
+    try {
+      await prisma.$connect();
+      console.log('✅ Database connected successfully');
+    } catch (dbError) {
+      console.error('❌ Database connection failed:', dbError);
+      console.log('⚠️ Continuing without database connection...');
+    }
 
     const managerEmail = 'manager@mail.com';
     const managerPassword = '12345678';
 
-    // Manager ni o'chirish va qayta yaratish
-    await prisma.admin.deleteMany({
-      where: { email: managerEmail }
-    });
-
-    const existingManager = await prisma.admin.findUnique({
-      where: { email: managerEmail },
-    });
-
-    if (!existingManager) {
-      const hashedPassword = await bcrypt.hash(managerPassword, 10);
-      await prisma.admin.create({
-        data: {
-          full_name: 'Super Manager',
-          email: managerEmail,
-          password: hashedPassword, 
-          role: 'MANAGER',
-        },
+    // Manager ni faqat database ulangan bo'lsa yaratamiz
+    try {
+      await prisma.admin.deleteMany({
+        where: { email: managerEmail }
       });
-      console.log('✅ Manager created successfully');
-    } else {
-      console.log('✅ Manager already exists');
+
+      const existingManager = await prisma.admin.findUnique({
+        where: { email: managerEmail },
+      });
+
+      if (!existingManager) {
+        const hashedPassword = await bcrypt.hash(managerPassword, 10);
+        await prisma.admin.create({
+          data: {
+            full_name: 'Super Manager',
+            email: managerEmail,
+            password: hashedPassword, 
+            role: 'MANAGER',
+          },
+        });
+        console.log('✅ Manager created successfully');
+      } else {
+        console.log('✅ Manager already exists');
+      }
+    } catch (managerError) {
+      console.log('⚠️ Manager creation skipped due to database error');
     }
 
     app.use(cookieParser());
