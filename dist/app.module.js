@@ -33,30 +33,10 @@ exports.AppModule = AppModule;
 exports.AppModule = AppModule = __decorate([
     (0, common_1.Global)(),
     (0, common_1.Module)({
-        imports: [
-            config_1.ConfigModule.forRoot({ envFilePath: ".env", isGlobal: true }),
-            user_module_1.UserModule,
-            prisma_module_1.PrismaModule,
-            company_module_1.CompanyModule,
-            branch_module_1.BranchModule,
-            car_module_1.CarModule,
-            feature_module_1.FeatureModule,
-            car_feature_module_1.CarFeatureModule,
-            damage_module_1.DamageModule,
-            payments_module_1.PaymentsModule,
-            rental_module_1.RentalModule,
-            car_images_module_1.CarImagesModule,
-            car_maintenance_module_1.CarMaintenanceModule,
-            reviews_module_1.ReviewsModule,
-            documents_module_1.DocumentsModule,
-            complaints_module_1.ComplaintsModule,
-            notification_module_1.NotificationModule,
-            auth_module_1.AuthModule,
-            admin_module_1.AdminModule,
-        ],
+        imports: [config_1.ConfigModule.forRoot({ envFilePath: ".env", isGlobal: true }), user_module_1.UserModule, prisma_module_1.PrismaModule, company_module_1.CompanyModule, branch_module_1.BranchModule, car_module_1.CarModule, feature_module_1.FeatureModule, car_feature_module_1.CarFeatureModule, damage_module_1.DamageModule, payments_module_1.PaymentsModule, rental_module_1.RentalModule, car_images_module_1.CarImagesModule, car_maintenance_module_1.CarMaintenanceModule, reviews_module_1.ReviewsModule, documents_module_1.DocumentsModule, complaints_module_1.ComplaintsModule, notification_module_1.NotificationModule, auth_module_1.AuthModule, admin_module_1.AdminModule],
         controllers: [],
         providers: [],
-        exports: [],
+        exports: []
     })
 ], AppModule);
 //# sourceMappingURL=app.module.js.map

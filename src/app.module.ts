@@ -18,11 +18,10 @@ import { ComplaintsModule } from './complaints/complaints.module';
 import { NotificationModule } from './notification/notification.module';
 import { AuthModule } from './auth/auth.module';
 import { AdminModule } from './admin/admin.module';
-import { HealthModule } from './health/health.module';
 
 @Global()
 @Module({
-  imports: [ConfigModule.forRoot({envFilePath: ".env", isGlobal: true}), UserModule, PrismaModule, CompanyModule, BranchModule, CarModule, FeatureModule, CarFeatureModule, DamageModule, PaymentsModule, RentalModule, CarImagesModule, CarMaintenanceModule, ReviewsModule, DocumentsModule, ComplaintsModule, NotificationModule, AuthModule, AdminModule, HealthModule],
+  imports: [ConfigModule.forRoot({envFilePath: ".env", isGlobal: true}), UserModule, PrismaModule, CompanyModule, BranchModule, CarModule, FeatureModule, CarFeatureModule, DamageModule, PaymentsModule, RentalModule, CarImagesModule, CarMaintenanceModule, ReviewsModule, DocumentsModule, ComplaintsModule, NotificationModule, AuthModule, AdminModule],
   controllers: [],
   providers: [],
   exports: []
