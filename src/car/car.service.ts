@@ -7,6 +7,7 @@ import {
 import { PrismaService } from "../prisma/prisma.service";
 import { CreateCarDto } from "./dto/create-car.dto";
 import { UpdateCarDto } from "./dto/update-car.dto";
+import { contains } from "class-validator";
 
 @Injectable()
 export class CarService {
@@ -43,6 +44,13 @@ export class CarService {
       include: { branch: true, car_images: true },
       orderBy: { year: "desc" },
     });
+  }
+
+  async findByName(model: string){
+    return await this.prismaService.car.findMany({
+      where: {model: {contains: model}},
+      include: {branch: true, car_images: true}
+    })
   }
 
   async findByPrice(minPrice?: number, maxPrice?: number) {

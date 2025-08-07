@@ -37,6 +37,9 @@ let CarController = class CarController {
     findByYear(year) {
         return this.carService.findByYear(year);
     }
+    findByName(model) {
+        return this.carService.findByName(model);
+    }
     findByPrice(minPrice, maxPrice) {
         return this.carService.findByPrice(minPrice ? +minPrice : undefined, maxPrice ? +maxPrice : undefined);
     }
@@ -96,6 +99,17 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], CarController.prototype, "findByYear", null);
+__decorate([
+    (0, swagger_1.ApiOperation)({ summary: "Avtomobillarni modeli bo'yicha qidirish" }),
+    (0, swagger_1.ApiQuery)({ name: "model", required: true, description: "Avtomobil modeli" }),
+    (0, swagger_1.ApiResponse)({ status: 200, description: "Model bo'yicha topilgan avtomobillar" }),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
+    (0, common_1.Get)("search/model"),
+    __param(0, (0, common_1.Query)("model")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", void 0)
+], CarController.prototype, "findByName", null);
 __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Avtomobillarni narxi bo'yicha qidirish" }),
     (0, swagger_1.ApiQuery)({ name: "minPrice", required: false, description: "Minimal narx" }),

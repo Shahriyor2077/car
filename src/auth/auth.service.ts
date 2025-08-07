@@ -25,7 +25,6 @@ export class AuthService {
     return { accessToken, refreshToken };
   }
 
-  // 1. Register
   async register(dto: CreateUserDto) {
     const userExists = await this.prisma.user.findUnique({
       where: { email: dto.email },
@@ -42,7 +41,7 @@ export class AuthService {
         ...dto,
         password: hashedPassword,
         activation_link,
-        is_active: false, 
+        is_active: false,
       },
     });
 
@@ -68,7 +67,6 @@ export class AuthService {
     };
   }
 
-  // 2. Activate
   async activate(link: string) {
     const user = await this.prisma.user.findFirst({
       where: { activation_link: link },
@@ -88,7 +86,6 @@ export class AuthService {
     return { message: "Email muvaffaqiyatli tasdiqlandi!" };
   }
 
-  // 3. Login
   async login(email: string, password: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) {
@@ -106,22 +103,18 @@ export class AuthService {
     const payload = {
       sub: user.id,
       email: user.email,
-      role: "USER"
+      role: "USER",
     };
     return this.generateTokens(payload);
   }
 
-  // 4. Logout
   async logout() {
-    // Token blacklist yoki invalidate qilish mumkin
-    // Hozircha oddiy response qaytaradi
-    return { 
+    return {
       message: "Logout muvaffaqiyatli",
-      success: true 
+      success: true,
     };
   }
 
-  // 5. Refresh token
   async refreshToken(oldRefreshToken: string) {
     if (!oldRefreshToken) {
       throw new UnauthorizedException("Refresh token topilmadi");

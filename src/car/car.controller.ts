@@ -5,6 +5,8 @@ import { ManagerOnlyGuard } from '../auth/common/guards/manager-only.guard';
 import { CarService } from './car.service';
 import { CreateCarDto } from './dto/create-car.dto';
 import { UpdateCarDto } from './dto/update-car.dto';
+import { RoleGuard } from 'src/auth/common/guards';
+import { Roles } from 'src/auth/common/decorators/roles.decorator';
 
 @ApiTags("Car - Avtomobillar")
 @ApiBearerAuth()
@@ -45,6 +47,17 @@ export class CarController {
   @Get("search/year")
   findByYear(@Query("year") year: string) {
     return this.carService.findByYear(year);
+  }
+
+  @ApiOperation({ summary: "Avtomobillarni modeli bo'yicha qidirish" })
+  @ApiQuery({ name: "model", required: true, description: "Avtomobil modeli" })
+  @ApiResponse({ status: 200, description: "Model bo'yicha topilgan avtomobillar" })
+  @UseGuards(JwtAuthGuard)
+  @Get("search/model")
+  findByName(
+    @Query("model") model: string
+  ){
+    return this.carService.findByName(model)
   }
 
   @ApiOperation({ summary: "Avtomobillarni narxi bo'yicha qidirish" })

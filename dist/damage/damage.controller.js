@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.DamageController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
+const jwt_auth_guard_1 = require("../auth/common/guards/jwt-auth.guard");
 const admin_auth_guard_1 = require("../auth/common/guards/admin-auth.guard");
 const damage_service_1 = require("./damage.service");
 const create_damage_dto_1 = require("./dto/create-damage.dto");
@@ -45,7 +46,7 @@ __decorate([
     (0, swagger_1.ApiOperation)({ summary: "Zarar yaratish" }),
     (0, swagger_1.ApiResponse)({ status: 201, description: "Zarar yaratildi" }),
     (0, swagger_1.ApiResponse)({ status: 400, description: "Noto'g'ri ma'lumotlar" }),
-    (0, common_1.UseGuards)(admin_auth_guard_1.AdminAuthGuard),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
@@ -57,7 +58,7 @@ __decorate([
     (0, swagger_1.ApiParam)({ name: "id", description: "Zarar ID" }),
     (0, swagger_1.ApiResponse)({ status: 200, description: "Zarar ma'lumoti" }),
     (0, swagger_1.ApiResponse)({ status: 404, description: "Zarar topilmadi" }),
-    (0, common_1.UseGuards)(admin_auth_guard_1.AdminAuthGuard),
+    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.Get)(":id"),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),

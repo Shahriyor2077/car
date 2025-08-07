@@ -45,6 +45,12 @@ let CarService = class CarService {
             orderBy: { year: "desc" },
         });
     }
+    async findByName(model) {
+        return await this.prismaService.car.findMany({
+            where: { model: { contains: model } },
+            include: { branch: true, car_images: true }
+        });
+    }
     async findByPrice(minPrice, maxPrice) {
         const where = {};
         if (minPrice || maxPrice) {
@@ -136,6 +142,7 @@ let CarService = class CarService {
             where: { id },
         });
     }
+    ;
 };
 exports.CarService = CarService;
 exports.CarService = CarService = __decorate([

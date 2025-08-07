@@ -7,8 +7,14 @@ const swagger_1 = require("@nestjs/swagger");
 const cookieParser = require("cookie-parser");
 const prisma_service_1 = require("./prisma/prisma.service");
 const bcrypt = require("bcrypt");
+const nest_winston_1 = require("nest-winston");
+const winston_logging_1 = require("./auth/common/logging/winston.logging");
+const error_handling_1 = require("./auth/common/errors/error.handling");
 async function bootstrap() {
-    const app = await core_1.NestFactory.create(app_module_1.AppModule, {});
+    const app = await core_1.NestFactory.create(app_module_1.AppModule, {
+        logger: nest_winston_1.WinstonModule.createLogger(winston_logging_1.winstonConfig)
+    });
+    app.useGlobalFilters(new error_handling_1.AllExeptionsFilter());
     const prisma = app.get(prisma_service_1.PrismaService);
     await prisma.$connect();
     const managerEmail = 'manager@mail.com';

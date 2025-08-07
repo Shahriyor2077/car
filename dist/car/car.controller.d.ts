@@ -101,6 +101,32 @@ export declare class CarController {
         price_per_day: string;
         is_available: boolean;
     })[]>;
+    findByName(model: string): Promise<({
+        car_images: {
+            id: number;
+            car_id: number;
+            image: string;
+        }[];
+        branch: {
+            phone: string;
+            id: number;
+            name: string;
+            created_at: Date;
+            address: string;
+            company_id: number;
+        };
+    } & {
+        id: number;
+        created_at: Date;
+        branch_id: number;
+        brand: string;
+        model: string;
+        year: string;
+        color: string;
+        mileage: number;
+        price_per_day: string;
+        is_available: boolean;
+    })[]>;
     findByPrice(minPrice?: string, maxPrice?: string): Promise<({
         car_images: {
             id: number;

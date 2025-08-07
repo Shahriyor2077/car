@@ -12,15 +12,13 @@ export class AdminService {
     private prisma: PrismaService,
     private jwtService: JwtService
   ) {}
-
-  // Generate tokens for admin
   private generateTokens(payload: any) {
     const accessToken = this.jwtService.sign(payload, { expiresIn: '3d' });
     const refreshToken = this.jwtService.sign(payload, { expiresIn: '7d' });
     return { accessToken, refreshToken };
   }
 
-  // Manager faqat admin qo'sha oladi
+
   async create(createAdminDto: CreateAdminDto, currentAdminRole: string) {
     if (currentAdminRole !== 'MANAGER') {
       throw new ForbiddenException('Faqat manager admin qo\'sha oladi');
@@ -39,7 +37,7 @@ export class AdminService {
         full_name: createAdminDto.full_name,
         email: createAdminDto.email,
         password: hashedPassword,
-        role: createAdminDto.role, // undefined bo'lsa default ishlaydi
+        role: createAdminDto.role,
       },
     });
 
@@ -49,7 +47,7 @@ export class AdminService {
     };
   }
 
-  // Admin login (email tasdiqlashsiz)
+
   async login(email: string, password: string) {
     const admin = await this.prisma.admin.findUnique({ where: { email } });
     if (!admin) {
@@ -74,7 +72,7 @@ export class AdminService {
     return { message: 'Logout muvaffaqiyatli' };
   }
 
-  // Refresh token for admin
+
   async refreshToken(oldRefreshToken: string) {
     if (!oldRefreshToken) {
       throw new UnauthorizedException('Refresh token topilmadi');
@@ -96,7 +94,6 @@ export class AdminService {
     return this.generateTokens(newPayload);
   }
 
-  // CRUD operations
   findAll() {
     return this.prisma.admin.findMany();
   }

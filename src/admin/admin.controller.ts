@@ -30,7 +30,7 @@ export class AdminController {
   async login(@Body() body: { email: string; password: string }, @Res({ passthrough: true }) res: Response) {
     const { accessToken, refreshToken } = await this.adminService.login(body.email, body.password);
     
-    // Refresh token ni cookie da saqlash
+
     res.cookie("adminRefreshToken", refreshToken, {
       httpOnly: true,
       secure: false, 
@@ -85,7 +85,7 @@ export class AdminController {
       secure: false,
       sameSite: "strict"
     });
-    // Authorization header ni o'chirish
+   
     res.removeHeader("Authorization");
     
     return { 

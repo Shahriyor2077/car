@@ -31,7 +31,7 @@ export class DamageController {
   @ApiOperation({ summary: "Zarar yaratish" })
   @ApiResponse({ status: 201, description: "Zarar yaratildi" })
   @ApiResponse({ status: 400, description: "Noto'g'ri ma'lumotlar" })
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() createDamageDto: CreateDamagesDto) {
     return this.damageService.create(createDamageDto);
@@ -41,7 +41,7 @@ export class DamageController {
   @ApiParam({ name: "id", description: "Zarar ID" })
   @ApiResponse({ status: 200, description: "Zarar ma'lumoti" })
   @ApiResponse({ status: 404, description: "Zarar topilmadi" })
-  @UseGuards(AdminAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.damageService.findOne(+id);

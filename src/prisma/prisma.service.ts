@@ -5,12 +5,12 @@ import { PrismaClient } from '../../generated/prisma';
 export class PrismaService extends PrismaClient implements OnModuleInit, OnModuleDestroy {
     constructor(){
         super({
-          datasources: {
-            db: {
-              url: "postgresql://postgres:shahriyor@localhost:5432/car_rental",
-            },
-          },
-        });
+            datasources:{
+                db:{
+                    url: process.env.DATABASE_URL || "postgresql://postgres:shahriyor@localhost:5432/car_rental"
+                }
+            }
+        })
     }
 
     async onModuleInit() {

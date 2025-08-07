@@ -18,10 +18,10 @@ async function bootstrap() {
     //   prefix: "Car-Rental",
     //   json: false
     // }),
-    // logger: WinstonModule.createLogger(winstonConfig)
+    logger: WinstonModule.createLogger(winstonConfig)
 
   });
-  // app.useGlobalFilters(new AllExeptionsFilter());
+  app.useGlobalFilters(new AllExeptionsFilter());
 
 
   const prisma = app.get(PrismaService);

@@ -93,14 +93,14 @@ let AuthService = class AuthService {
         const payload = {
             sub: user.id,
             email: user.email,
-            role: "USER"
+            role: "USER",
         };
         return this.generateTokens(payload);
     }
     async logout() {
         return {
             message: "Logout muvaffaqiyatli",
-            success: true
+            success: true,
         };
     }
     async refreshToken(oldRefreshToken) {
