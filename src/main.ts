@@ -18,11 +18,10 @@ async function bootstrap() {
     //   prefix: "Car-Rental",
     //   json: false
     // }),
-    logger: WinstonModule.createLogger(winstonConfig)
+    // logger: WinstonModule.createLogger(winstonConfig)
 
   });
-  app.useGlobalFilters(new AllExeptionsFilter());
-
+  // app.useGlobalFilters(new AllExeptionsFilter());
 
   const prisma = app.get(PrismaService);
   await prisma.$connect();
@@ -30,6 +29,7 @@ async function bootstrap() {
   const managerEmail = 'manager@mail.com';
   const managerPassword = '12345678';
 
+  // Manager ni o'chirish va qayta yaratish
   await prisma.admin.deleteMany({
     where: { email: managerEmail }
   });
@@ -48,7 +48,9 @@ async function bootstrap() {
         role: 'MANAGER',
       },
     });
+    // Manager yaratildi
   } else {
+    // Manager allaqachon mavjud
   }
 
   app.use(cookieParser());
@@ -57,7 +59,7 @@ async function bootstrap() {
 
   const config = new DocumentBuilder()
     .setTitle('Avto Ijara loyihasi')
-    .setDescription('NestJS, Prisma REST API')
+    .setDescription('NestJS + Prisma REST API')
     .setVersion('1.0')
     .addBearerAuth()
     .build();
@@ -65,8 +67,8 @@ async function bootstrap() {
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('/api/docs', app, document);
 
-  const PORT = process.env.PORT || 5000;
-  await app.listen(PORT, () => {
+  const PORT = process.env.PORT || 3000;
+  await app.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Server http://localhost:${PORT}`);
     console.log(`📘 Swagger http://localhost:${PORT}/api/docs`);
   });
