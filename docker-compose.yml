@@ -1,0 +1,46 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: car_rental_db
+    environment:
+      POSTGRES_DB: car_rental
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: shahriyor
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - car_rental_network
+
+  # Car Rental API
+  api:
+    build: .
+    container_name: car_rental_api
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - DATABASE_URL=postgresql://postgres:shahriyor@postgres:5432/car_rental
+      - JWT_SECRET=your-super-secret-jwt-key-2024
+      - JWT_REFRESH_SECRET=your-super-secret-refresh-key-2024
+      - MAIL_HOST=smtp.gmail.com
+      - MAIL_PORT=587
+      - MAIL_USER=your-email@gmail.com
+      - MAIL_PASS=your-app-password
+    depends_on:
+      - postgres
+    networks:
+      - car_rental_network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+
+networks:
+  car_rental_network:
+    driver: bridge 
