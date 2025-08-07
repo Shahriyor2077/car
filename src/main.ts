@@ -10,6 +10,7 @@ import * as bcrypt from 'bcrypt';
 import { WinstonModule } from 'nest-winston';
 import { winstonConfig } from './auth/common/logging/winston.logging';
 import { AllExeptionsFilter } from './auth/common/errors/error.handling';
+import { ExpressAdapter } from '@nestjs/platform-express';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
@@ -54,6 +55,17 @@ async function bootstrap() {
   }
 
   app.use(cookieParser());
+  
+  // Healthcheck endpoint'ini global prefix'dan oldin qo'shamiz
+  const expressApp = app.getHttpAdapter().getInstance();
+  expressApp.get('/', (req, res) => {
+    res.json({ 
+      status: 'OK', 
+      message: 'Car Rental API is running',
+      timestamp: new Date().toISOString()
+    });
+  });
+  
   app.setGlobalPrefix('api');
   app.useGlobalPipes(new ValidationPipe());
 
