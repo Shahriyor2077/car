@@ -149,5 +149,5 @@ export class CarService {
     return await this.prismaService.car.delete({
       where: { id },
     });
-  }
+  };
 }
