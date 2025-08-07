@@ -1,0 +1,27 @@
+import { Module } from "@nestjs/common";
+import { DocumentsService } from "./documents.service";
+import { DocumentsController } from "./documents.controller";
+import { PrismaModule } from "../prisma/prisma.module";
+import { AdminModule } from "../admin/admin.module";
+import { JwtModule } from "@nestjs/jwt";
+import { ConfigModule, ConfigService } from "@nestjs/config";
+
+@Module({
+  imports: [
+    PrismaModule,
+    AdminModule,
+    JwtModule.registerAsync({
+      imports: [ConfigModule],
+      useFactory: async (configService: ConfigService) => ({
+        secret:
+          configService.get<string>("JWT_ACCESS_SECRET") ||
+          "my_access_secret_key",
+        signOptions: { expiresIn: "3d" },
+      }),
+      inject: [ConfigService],
+    }),
+  ],
+  controllers: [DocumentsController],
+  providers: [DocumentsService],
+})
+export class DocumentsModule {}

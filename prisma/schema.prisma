@@ -1,0 +1,237 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model companies {
+  id             Int        @id @default(autoincrement())
+  name           String
+  address        String
+  phone          String
+  license_number String
+  created_at     DateTime   @default(now())
+  branches       branches[]
+
+  @@map("company")
+}
+
+model branches {
+  id         Int       @id @default(autoincrement())
+  name       String
+  address    String
+  company_id Int
+  phone      String
+  created_at DateTime  @default(now())
+  company    companies @relation(fields: [company_id], references: [id])
+  cars       car[]
+
+  @@map("branch")
+}
+
+model car {
+  id              Int               @id @default(autoincrement())
+  branch_id       Int
+  brand           String
+  model           String
+  year            String
+  color           String
+  mileage         Int
+  price_per_day   String
+  is_available    Boolean
+  created_at      DateTime          @default(now())
+  branch          branches          @relation(fields: [branch_id], references: [id])
+  car_images      car_images[]
+  car_maintenance car_maintenance[]
+  car_feature     car_feature[]
+  rentals         rentals[]
+  reviews         reviews[]
+
+  @@map("car")
+}
+
+model car_images {
+  id     Int    @id @default(autoincrement())
+  car_id Int
+  image  String
+  car    car    @relation(fields: [car_id], references: [id])
+
+  @@map("car_image")
+}
+
+model car_maintenance {
+  id           Int     @id @default(autoincrement())
+  car_id       Int
+  service_date String
+  description  String
+  cost         Decimal
+  car          car     @relation(fields: [car_id], references: [id])
+
+  @@map("car_maintenance")
+}
+
+model car_feature {
+  id         Int     @id @default(autoincrement())
+  car_id     Int
+  feature_id Int
+  car        car     @relation(fields: [car_id], references: [id])
+  feature    feature @relation(fields: [feature_id], references: [id])
+
+  @@map("car_feature")
+}
+
+model feature {
+  id          Int           @id @default(autoincrement())
+  name        String
+  car_feature car_feature[]
+
+  @@map("feature")
+}
+
+model rentals {
+  id          Int          @id @default(autoincrement())
+  user_id     Int
+  car_id      Int
+  start_date  String
+  end_date    String
+  total_price Decimal
+  status      RentalStatus
+  created_at  DateTime     @default(now())
+  car         car          @relation(fields: [car_id], references: [id])
+  user        user         @relation(fields: [user_id], references: [id])
+  damages     damages[]
+  payments    payments[]
+  complaints  complaints[]
+
+  @@map("rentals")
+}
+
+model damages {
+  id            Int      @id @default(autoincrement())
+  rental_id     Int
+  description   String
+  cost_estimate String
+  damage_date   DateTime
+  rental        rentals  @relation(fields: [rental_id], references: [id])
+
+  @@map("damages")
+}
+
+model payments {
+  id             Int           @id @default(autoincrement())
+  rental_id      Int
+  amount         Decimal
+  payment_date   DateTime
+  payment_method PaymentMethod
+  status         PaymentStatus
+  rental         rentals       @relation(fields: [rental_id], references: [id])
+
+  @@map("payments")
+}
+
+model user {
+  id              Int             @id @default(autoincrement())
+  full_name       String
+  phone           String
+  email           String          @unique
+  password        String
+  birthday        String
+  is_active       Boolean         @default(false)
+  activation_link String?
+  rentals         rentals[]
+  reviews         reviews[]
+  documents       documents[]
+  notifications   notifications[]
+  complaints      complaints[]
+
+  @@map("user")
+}
+
+model reviews {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  car_id     Int
+  rating     String
+  created_at DateTime @default(now())
+  user       user     @relation(fields: [user_id], references: [id])
+  car        car      @relation(fields: [car_id], references: [id])
+
+  @@map("reviews")
+}
+
+model documents {
+  id              Int      @id @default(autoincrement())
+  user_id         Int
+  deliver_license String
+  created_at      DateTime @default(now())
+  user            user     @relation(fields: [user_id], references: [id])
+
+  @@map("documents")
+}
+
+model notifications {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  message    String
+  created_at DateTime @default(now())
+  user       user     @relation(fields: [user_id], references: [id])
+
+  @@map("notifications")
+}
+
+model complaints {
+  id         Int      @id @default(autoincrement())
+  user_id    Int
+  message    String
+  rental_id  Int
+  created_at DateTime @default(now())
+  user       user     @relation(fields: [user_id], references: [id])
+  rental     rentals  @relation(fields: [rental_id], references: [id])
+
+  @@map("complaints")
+}
+
+enum RentalStatus {
+  PENDING
+  ACTIVE
+  COMPLETED
+  CANCELLED
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
+enum PaymentMethod {
+  CASH
+  CARD
+  TRANSFER
+}
+
+enum AdminRole {
+  ADMIN
+  MANAGER
+}
+
+model admin {
+  id         Int       @id @default(autoincrement())
+  full_name  String
+  email      String    @unique
+  password   String
+  role       AdminRole @default(MANAGER)
+  created_at DateTime  @default(now())
+
+  @@map("admin")
+}
