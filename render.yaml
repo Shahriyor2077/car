@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: car-rental-api
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run start:prod
+    healthCheckPath: /
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 3000
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: MAIL_HOST
+        value: smtp.gmail.com
+      - key: MAIL_PORT
+        value: 587
+      - key: MAIL_USER
+        sync: false
+      - key: MAIL_PASS
+        sync: false
+
+databases:
+  - name: car-rental-db
+    databaseName: car_rental
+    user: car_rental_user 
